@@ -20,6 +20,7 @@
 
   * Interprets user commands
   * Executes them by communicating with the system
+  * Shell Scripting and Bash Scripting sometimes used interchangeably.
 
 ---
 
