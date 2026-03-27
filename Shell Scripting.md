@@ -46,6 +46,8 @@
   * Interact with the shell
 
 ---
+<img width="721" height="421" alt="image" src="https://github.com/user-attachments/assets/a5c06ccc-d576-4478-b44e-bf8750980668" />
+
 
 ## ⚙️ 2. Setting Up the Bash Environment
 
