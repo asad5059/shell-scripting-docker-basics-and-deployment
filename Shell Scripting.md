@@ -9,6 +9,7 @@
 
 * **GUI (Graphical User Interface)**: Interaction through visual elements like buttons and menus.
 * **CLI (Command Line Interface)**: Interaction through text-based commands.
+* GUI is limited for for repetitive tasks. For example, if we have to create 100 folders using GUI then it is a very hectic thing to do. But Shell Scripting shines here.
 
 👉 The CLI is **faster and more powerful** for repetitive and automation tasks compared to GUI.
 
