@@ -856,11 +856,6 @@ grep -c "error" logfile.txt
 # Search recursively through directories
 grep -r "TODO" src/
 
-# Show surrounding context
-grep -A 3 "ERROR" logfile.txt    # 3 lines After
-grep -B 3 "ERROR" logfile.txt    # 3 lines Before
-grep -C 3 "ERROR" logfile.txt    # 3 lines Context (both)
-
 # Extended regex (use | for OR, + for one-or-more)
 grep -E "ERROR|FATAL|CRITICAL" logfile.txt
 grep -E "[0-9]{3}-[0-9]{4}" contacts.txt    # phone numbers
@@ -893,18 +888,11 @@ sed '5,10d' file.txt                   # delete lines 5 through 10
 # Print specific lines
 sed -n '5p' file.txt                   # print only line 5
 sed -n '5,10p' file.txt               # print lines 5 through 10
-sed -n '/start/,/end/p' file.txt       # print between patterns
 
 # Insert and append
 sed '5i\New line inserted before line 5' file.txt
 sed '5a\New line appended after line 5' file.txt
 
-# Remove blank lines
-sed '/^$/d' file.txt
-
-# Remove leading/trailing whitespace
-sed 's/^[[:space:]]*//' file.txt    # leading
-sed 's/[[:space:]]*$//' file.txt    # trailing
 ```
 
 ### `awk` — Data Extraction & Reporting
