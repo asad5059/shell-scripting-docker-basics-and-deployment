@@ -343,9 +343,6 @@ chown alice:developers file.txt
 
 # Change group only
 chgrp developers file.txt
-
-# Change recursively
-chown -R alice:alice /home/alice/projects/
 ```
 
 ### Special Permissions
