@@ -441,22 +441,6 @@ du -sh * | sort -rh | head -10
 # See real-time updates from a log file with filtering
 tail -f /var/log/syslog | grep "WARN\|ERROR"
 ```
-
-### The `tee` Command — Split the Stream
-
-`tee` reads from stdin, writes to both stdout AND a file at the same time:
-
-```bash
-# Show output on screen AND save to file
-ls -l | tee filelist.txt
-
-# Append instead of overwrite
-command | tee -a logfile.txt
-
-# Build a pipeline that logs intermediate steps
-cat data.csv | tee raw_data.log | grep "active" | tee filtered.log | wc -l
-```
-
 ---
 
 ## 6. Variables, Environment & Shell Configuration
