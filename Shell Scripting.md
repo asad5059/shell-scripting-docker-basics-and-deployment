@@ -709,17 +709,6 @@ while true; do
 done
 ```
 
-#### `until` Loop
-
-```bash
-# Opposite of while — loop UNTIL condition becomes true
-count=1
-until [[ $count -gt 5 ]]; do
-    echo "Count: $count"
-    ((count++))
-done
-```
-
 #### Loop Control
 
 ```bash
@@ -770,6 +759,7 @@ sum=$(add_numbers 5 3)
 echo "Sum: $sum"
 
 # Use return for exit codes (0-255 only)
+# ! not operator. -s checks if the file is empty. "$1" is the first parameter of the function
 is_file_empty() {
     if [[ ! -s "$1" ]]; then
         return 0     # true — file is empty
