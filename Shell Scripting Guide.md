@@ -265,10 +265,6 @@ find /tmp -mtime +30                         # not modified in 30+ days
 # Find and execute a command on results
 find /tmp -name "*.tmp" -exec rm {} \;       # find and delete temp files
 find . -name "*.txt" -exec wc -l {} \;      # count lines in all .txt files
-
-# Faster alternative using locate (uses a database, must be updated)
-locate filename.txt
-sudo updatedb                                # update the locate database
 ```
 
 ---
