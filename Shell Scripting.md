@@ -488,10 +488,6 @@ colors["red"]="#FF0000"
 colors["green"]="#00FF00"
 echo ${colors["red"]}
 
-# Exporting variables to child processes
-export DATABASE_URL="postgres://localhost/mydb"
-# Now any script this script calls can also access DATABASE_URL
-
 # Local variables inside functions (more on this later)
 my_function() {
     local temp_var="I am local"
@@ -542,41 +538,7 @@ echo $USER
 # $USER    → current username
 # $SHELL   → current shell
 # $PWD     → current working directory
-# $EDITOR  → default text editor
-# $LANG    → current locale setting
 ```
-
-### Shell Configuration Files
-
-These files are loaded automatically when a shell starts:
-
-| File | When Loaded |
-|------|------------|
-| `/etc/profile` | System-wide, login shells |
-| `~/.bash_profile` | User-specific, login shells |
-| `~/.bashrc` | User-specific, interactive non-login shells |
-| `~/.bash_logout` | When a login shell exits |
-| `~/.profile` | POSIX-compatible alternative |
-
-```bash
-# Reload configuration without logging out
-source ~/.bashrc
-# or the shorthand:
-. ~/.bashrc
-
-# Add to PATH permanently (add to ~/.bashrc)
-export PATH="$HOME/.local/bin:$PATH"
-
-# Create an alias
-alias ll='ls -alF'
-alias grep='grep --color=auto'
-alias ..='cd ..'
-
-# Useful prompt customization (PS1)
-# This gives us: user@host:/current/dir$
-export PS1='\u@\h:\w\$ '
-```
-
 ---
 
 ## 7. Control Flow — Conditions and Loops
