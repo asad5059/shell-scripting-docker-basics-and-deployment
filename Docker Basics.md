@@ -1,7 +1,4 @@
 # 🐳 Docker: A Beginner's Guide to Containerization
-
-
-
 ---
 
 ## Table of Contents
@@ -17,8 +14,9 @@
 9. [Starting and Stopping Containers](#9-starting-and-stopping-containers)
 10. [Private Docker Registries](#10-private-docker-registries)
 11. [Registry vs Repository](#11-registry-vs-repository)
-12. [Dockerizing a Sample Django App](#12-dockerizing-a-sample-django-app)
-13. [Conclusion](#13-conclusion)
+12. [Running Multiple Containers from the Same Image](#12-running-multiple-containers-from-the-same-image)
+13. [Dockerizing a Sample Django App](#13-dockerizing-a-sample-django-app)
+14. [Conclusion](#14-conclusion)
 
 ---
 
@@ -602,7 +600,133 @@ Registry (Docker Hub)
 
 ---
 
-## 12. Dockerizing a Sample Django App
+## 12. Running Multiple Containers from the Same Image
+
+One of Docker's most powerful features is the ability to **run multiple containers from the same image**, each behaving as a completely independent environment. Let's make this concrete with a hands-on Nginx example.
+
+### The Goal
+
+We will spin up two Nginx containers from the same `nginx` image — but different version tags — each serving different content on different host ports:
+
+- `nginx:latest` → accessible at `http://localhost:8080`
+- `nginx:1.23` → accessible at `http://localhost:9000`
+
+### Step 1: Run Two Containers on Different Ports
+
+```bash
+# Run the latest version
+docker run -d -p 8080:80 --name nginx_latest nginx:latest
+
+# Run a specific older version
+docker run -d -p 9000:80 --name nginx_123 nginx:1.23
+```
+
+Now verify both are running:
+
+```bash
+docker ps
+```
+
+We should see something like this:
+
+```
+NAMES          PORTS
+nginx_latest   0.0.0.0:8080->80/tcp
+nginx_123      0.0.0.0:9000->80/tcp
+```
+
+Two containers, same image, zero conflict.
+
+### Step 2: Customize Each Container's Content
+
+Let's modify the default `index.html` inside each container so we can prove they're truly independent.
+
+**Modify `nginx_latest`:**
+
+```bash
+docker exec -it nginx_latest sh
+cd /usr/share/nginx/html
+echo "<h1>NGINX LATEST VERSION</h1>" > index.html
+exit
+```
+
+**Modify `nginx_123`:**
+
+```bash
+docker exec -it nginx_123 sh
+cd /usr/share/nginx/html
+echo "<h1>NGINX 1.23 VERSION</h1>" > index.html
+exit
+```
+
+### Step 3: Verify in the Browser
+
+Open both URLs and we'll see different content from each container:
+
+- `http://localhost:8080` → **NGINX LATEST VERSION**
+- `http://localhost:9000` → **NGINX 1.23 VERSION**
+
+Same image. Same internal port. Completely different containers.
+
+### How Is This Possible? The Isolation Model
+
+At first glance this might seem puzzling — both containers run Nginx internally on port 80, so why is there no conflict? The answer is Docker's **network namespace isolation**.
+
+Each container gets its own:
+
+- Isolated filesystem
+- Isolated network namespace
+- Its own internal IP address
+
+So internally, both containers listen on port 80 — but they live in completely separate network spaces. The magic happens at the host level, where Docker maps them to different host ports:
+
+```
+┌─────────────────────────────────────────────────────┐
+│                    Our Machine                       │
+│                                                      │
+│   localhost:8080 ──────────────► nginx_latest:80     │
+│                                                      │
+│   localhost:9000 ──────────────► nginx_123:80        │
+│                                                      │
+│   (Host ports must be unique — container ports       │
+│    can be identical across different containers)     │
+└─────────────────────────────────────────────────────┘
+```
+
+And here's the full picture side by side:
+
+| Container | Internal Port | Host Port | URL |
+|---|---|---|---|
+| `nginx_latest` | 80 | 8080 | http://localhost:8080 |
+| `nginx_123` | 80 | 9000 | http://localhost:9000 |
+
+The rule to remember: **container ports can repeat across containers — host ports cannot**.
+
+### An Important Note on Container Edits
+
+We edited `index.html` directly inside a running container in this example. This is fine for learning and experimentation, but there's a catch — **those changes are lost the moment the container is removed**.
+
+```bash
+docker rm -f nginx_latest
+# The custom index.html we wrote? Gone.
+```
+
+In real-world applications, we should instead:
+
+- Use **Docker volumes** to mount files from our host into the container (changes persist)
+- Or bake the content directly into a **custom image** via a `Dockerfile`
+
+### Key Takeaways
+
+- We can run as many containers as we like from a single image
+- Each container is a fully isolated environment — its own filesystem, network, and process space
+- The same internal port (e.g., `80`) can be used by multiple containers simultaneously
+- Only **host ports** need to be unique on our machine
+- In-container edits are temporary and disappear when the container is removed
+
+---
+
+## 13. Dockerizing a Sample Django App
 
 Now let's put everything together and **Dockerize a real Django application** from scratch. This is where theory meets practice.
 
@@ -759,7 +883,7 @@ docker run -d \
 
 ---
 
-## 13. Conclusion
+## 14. Conclusion
 
 We've covered a lot of ground together! Let's recap what we've learned on this journey:
 
@@ -774,6 +898,7 @@ We've covered a lot of ground together! Let's recap what we've learned on this j
 - **Private registries** keep our proprietary images secure and within our infrastructure
 - A **registry** is the warehouse; a **repository** is the shelf for one application
 - We can **Dockerize any app** — including Django — with a well-written `Dockerfile`
+- **Multiple containers** can run from the same image simultaneously, each fully isolated with its own network and filesystem
 
 ### What's Next?
 
