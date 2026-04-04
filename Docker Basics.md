@@ -16,7 +16,8 @@
 11. [Registry vs Repository](#11-registry-vs-repository)
 12. [Running Multiple Containers from the Same Image](#12-running-multiple-containers-from-the-same-image)
 13. [Dockerizing a Sample Django App](#13-dockerizing-a-sample-django-app)
-14. [Conclusion](#14-conclusion)
+14. [Debugging with Docker](#14-debugging-with-docker)
+15. [Conclusion](#15-conclusion)
 
 ---
 
@@ -880,7 +881,117 @@ docker run -d \
 
 ---
 
-## 14. Conclusion
+
+## 14. Debugging with Docker
+ 
+Things will break. That's just part of development. The good news is Docker gives us a solid set of commands to figure out exactly what's going wrong and where. Here's our go-to debugging toolkit.
+ 
+---
+ 
+### 1. Viewing Logs
+ 
+The first thing we should always check when something goes wrong.
+ 
+```bash
+# View logs of a container
+docker logs <container-name>
+ 
+# Follow logs in real-time
+docker logs -f <container-name>
+ 
+# Show only the last 50 lines
+docker logs --tail 50 <container-name>
+ 
+# Show logs with timestamps
+docker logs -t <container-name>
+ 
+# Combine all three — live, timestamped, last 50 lines
+docker logs -f -t --tail 50 <container-name>
+```
+ 
+---
+ 
+### 2. Getting a Shell Inside a Running Container
+ 
+When logs aren't enough and we need to look around inside the container ourselves.
+ 
+```bash
+# Open an interactive bash shell
+docker exec -it <container-name> bash
+ 
+# If bash isn't available (slim or alpine images), use sh
+docker exec -it <container-name> sh
+```
+ 
+Once inside, we can check things like:
+ 
+```bash
+env           # are our environment variables set correctly?
+ls /app       # are our files actually there?
+ping postgres # can we reach another container?
+cat /etc/nginx/nginx.conf  # what does the config actually say?
+```
+ 
+---
+ 
+### 3. Inspecting Containers
+ 
+Useful when we want to verify how a container was actually configured — ports, volumes, environment variables, network settings.
+ 
+```bash
+# Full container metadata as JSON
+docker inspect <container-name>
+ 
+# Check just the exit code (0 = clean, anything else = error)
+docker inspect <container-name> --format='{{.State.ExitCode}}'
+ 
+# Check environment variables
+docker inspect <container-name> --format='{{.Config.Env}}'
+ 
+# Check network settings
+docker inspect <container-name> --format='{{json .NetworkSettings}}'
+```
+ 
+---
+ 
+### 4. Monitoring Resource Usage
+ 
+When a container isn't crashing but feels slow or unresponsive, it might be consuming too many resources.
+ 
+```bash
+# Live resource usage for all running containers
+docker stats
+ 
+# Resource usage for a specific container
+docker stats <container-name>
+```
+ 
+This shows CPU %, memory, network I/O, and disk I/O in real time — like `top`, but for Docker containers.
+ 
+---
+ 
+### 5. Running One-Off Commands
+ 
+We don't always need a full shell. Sometimes we just want to run a single command and see what it returns.
+ 
+```bash
+# Run Django's system checks
+docker exec django-app python manage.py check
+ 
+# See which migrations have and haven't run
+docker exec django-app python manage.py showmigrations
+ 
+# Open the Django interactive shell inside the container
+docker exec -it django-app python manage.py shell
+ 
+# Print all environment variables
+docker exec django-app env
+```
+
+ 
+---
+
+## 15. Conclusion
 
 We've covered a lot of ground together! Let's recap what we've learned on this journey:
 
