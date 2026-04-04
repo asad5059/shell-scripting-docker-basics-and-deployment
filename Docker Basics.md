@@ -276,9 +276,6 @@ docker pull ubuntu:22.04
 # Run a container from an image
 docker run <image-name>
 
-# Run interactively with a terminal
-docker run -it ubuntu:22.04 bash
-
 # Run in detached (background) mode
 docker run -d nginx
 
