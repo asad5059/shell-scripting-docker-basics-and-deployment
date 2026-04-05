@@ -407,9 +407,6 @@ Line 1
 Line 2
 Line 3
 EOF
-
-# Here String — single line input
-grep "pattern" <<< "this is the string to search"
 ```
 
 ### Pipes — The True Power Move
