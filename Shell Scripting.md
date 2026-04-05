@@ -582,57 +582,6 @@ fi
 > fi
 > ```
 
-### Practical `if` Examples
-
-```bash
-#!/bin/bash
-
-# Check if a file exists before reading it
-if [[ -f "$1" ]]; then
-    echo "Reading file: $1"
-    cat "$1"
-else
-    echo "Error: File '$1' not found"
-    exit 1
-fi
-
-# Check if running as root
-if [[ $EUID -ne 0 ]]; then
-    echo "This script must be run as root"
-    exit 1
-fi
-
-# Check if a command succeeded
-if cp source.txt backup.txt; then
-    echo "Backup created successfully"
-else
-    echo "Backup failed!"
-fi
-```
-
-### The `case` Statement — Cleaner Multi-branch Logic
-
-```bash
-#!/bin/bash
-
-day=$(date +%A)    # Monday, Tuesday, etc.
-
-case "$day" in
-    Monday)
-        echo "Start of the work week, let's go!"
-        ;;
-    Friday)
-        echo "Almost the weekend!"
-        ;;
-    Saturday|Sunday)
-        echo "It's the weekend!"
-        ;;
-    *)
-        echo "Just another weekday."
-        ;;
-esac
-```
-
 ### Loops
 
 #### `for` Loop
