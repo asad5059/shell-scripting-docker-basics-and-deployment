@@ -555,16 +555,6 @@ fi
 ### Test Conditions
 
 ```bash
-# File tests
-[ -f file.txt ]       # true if file exists and is a regular file
-[ -d mydir ]          # true if directory exists
-[ -e path ]           # true if path exists (file or dir)
-[ -r file ]           # true if readable
-[ -w file ]           # true if writable
-[ -x file ]           # true if executable
-[ -s file ]           # true if file is non-empty
-[ -L file ]           # true if symbolic link
-
 # String tests
 [ -z "$str" ]         # true if string is empty
 [ -n "$str" ]         # true if string is NOT empty
