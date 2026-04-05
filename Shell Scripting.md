@@ -1041,12 +1041,6 @@ sudo mount -t vfat /dev/sdc1 /mnt/usb   # FAT32 USB drive
 # Unmount a device
 sudo umount /mnt/usb
 sudo umount /dev/sdb1     # either path works
-
-# The /etc/fstab file — auto-mount on boot
-cat /etc/fstab
-
-# Test fstab without rebooting
-sudo mount -a
 ```
 
 ---
