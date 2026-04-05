@@ -1018,13 +1018,6 @@ readlink -f symlink.txt    # resolve to absolute path
 # If the original is deleted, the symlink becomes "dangling" (broken)
 ```
 
-| Feature | Hard Link | Symbolic Link |
-|---------|-----------|---------------|
-| Cross filesystem | ❌ | ✅ |
-| Link to directory | ❌ | ✅ |
-| Shows as link in `ls -l` | ❌ | ✅ |
-| Survives deletion of target | ✅ | ❌ |
-
 ### Mounting File Systems
 
 "Mounting" means attaching a storage device to a directory in the file system tree. Without mounting, we can't access the device's contents.
